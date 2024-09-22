@@ -1,4 +1,4 @@
-from main import Ship, GamePole
+from classes import Ship, GamePole
 
 
 ship = Ship(2)
