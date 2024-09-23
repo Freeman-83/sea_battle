@@ -65,7 +65,7 @@ class Ship:
         )
         
     def is_out_pole(self, size):
-        """Метод для проверки корректности расположения кораблей границ игрового поля."""
+        """Метод для проверки корректности расположения кораблей относительно границ игрового поля."""
         if self._tp == 1:
             return self._x + self._length > size
         return self._y + self._length > size
@@ -126,6 +126,7 @@ class GamePole:
 
     def set_ship(self, x, y, length, tp, cells):
         """Метод для установки корабля на выбранную позицию."""
+
         if tp == 1:
             self._pole[y][x:x + length] = cells
         else:
@@ -155,12 +156,16 @@ class SeaBattle:
 
     @staticmethod
     def mark_target(pole, ship, x, y):
+        """Статический метод для отметки изменения состояния корабля."""
+
         pole._pole[y][x] = 'X'
-        ship._cells[x - ship._x] = 'X'
+        ship[x - ship._x] = 'X'
         if set(ship._cells) == {'X'}:
             pole._ships.remove(ship)
 
     def take_shot(self, pole: GamePole, x: int, y: int):
+        """Метод для совершения атаки."""
+
         flag = False
         for ship in pole._ships:
             if ship._tp == 1 and x in range(ship._x, ship._x + ship._length) and y == ship._y:
@@ -172,11 +177,7 @@ class SeaBattle:
                 self.mark_target(pole, ship, x, y)
                 flag = True
                 break
-
         else:
             pole._pole[y][x] = '*'
 
         return flag
-
-
-        

@@ -13,8 +13,12 @@ from classes import Ship, GamePole, SeaBattle
 
 def take_action(battle, pole, user=True):
     if user:
-        x = int(input('Введите координат расположения корабля по горизонтали: '))
-        y = int(input('Введите координат расположения корабля по вертикали: '))
+        x = int(input(f'Введите координату расположения корабля по горизонтали в диапазоне от 0 до {pole._size - 1}: '))
+        y = int(input(f'Введите координату расположения корабля по вертикали в диапазоне от 0 до {pole._size - 1}: '))
+        if x not in range(pole._size) or y not in range(pole._size):
+            print('Неверные координаты! Попробуйте снова!')
+            take_action(battle, pole, user)
+
     else:
         x = randint(0, pole._size - 1)
         y = randint(0, pole._size - 1)
