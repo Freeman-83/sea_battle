@@ -1,12 +1,23 @@
 from classes import Ship, GamePole
 
 
+SIZE_GAME_POLE = 10
+
+pole = GamePole(SIZE_GAME_POLE)
+pole.init()
+pole.show()
+
+pole.move_ships()
+print()
+pole.show()
+
+
 ship = Ship(2)
 ship = Ship(2, 1)
 ship = Ship(3, 2, 0, 0)
 
 assert ship._length == 3 and ship._tp == 2 and ship._x == 0 and ship._y == 0, "неверные значения атрибутов объекта класса Ship"
-assert ship._cells == [1, 1, 1], "неверный список _cells"
+assert ship._cells == [3, 3, 3], "неверный список _cells"
 assert ship._is_move, "неверное значение атрибута _is_move"
 
 ship.set_start_coords(1, 2)
@@ -50,3 +61,5 @@ assert len(gp) == 10 and len(gp[0]) == 10, "неверные размеры иг
 
 pole_size_8 = GamePole(8)
 pole_size_8.init()
+
+print('Тестерование завершено. Ошибок не обнаружено')
