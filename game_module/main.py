@@ -11,50 +11,56 @@ from classes import Ship, GamePole, SeaBattle
 
 #     return ship
 
-def take_action(battle, pole, user=True):
+
+def take_action(battle: SeaBattle, target_pole: GamePole, current_pole: GamePole, user=True):
     if user:
-        x = int(input(f'Введите координату расположения корабля по горизонтали в диапазоне от 0 до {pole._size - 1}: '))
-        y = int(input(f'Введите координату расположения корабля по вертикали в диапазоне от 0 до {pole._size - 1}: '))
-        if x not in range(pole._size) or y not in range(pole._size):
+        x = int(input(f'Введите координату расположения корабля по горизонтали в диапазоне от 0 до {target_pole._size - 1}: '))
+        y = int(input(f'Введите координату расположения корабля по вертикали в диапазоне от 0 до {target_pole._size - 1}: '))
+        if x not in range(target_pole._size) or y not in range(target_pole._size):
             print('Неверные координаты! Попробуйте снова!')
-            take_action(battle, pole, user)
+            take_action(battle, target_pole, current_pole, user)
 
     else:
-        x = randint(0, pole._size - 1)
-        y = randint(0, pole._size - 1)
+        x = randint(0, target_pole._size - 1)
+        y = randint(0, target_pole._size - 1)
 
-    is_hit = battle.take_shot(pole, x, y)
-    pole.show()
-    print()
+    is_hit = battle.take_shot(target_pole, current_pole, x, y)
+    if user:
+        print('User Pole')
+        current_pole.show(current_pole._pole)
+        print()
+        print('Opponent Pole for User')
+        current_pole.show(current_pole._opponent_pole)
+
+    # print()
     if is_hit:
-        take_action(battle, pole, user)
+        take_action(battle, target_pole, current_pole, user)
 
 
 def main():
     pole_size = 10
 
     # Инициализация поля пользователя
-    user_game_pole = GamePole(pole_size)
-    user_game_pole.init()
-    user_game_pole.show()
-
-    print()
+    user_pole = GamePole(pole_size)
+    user_pole.init()
 
     # Инициализация поля компьютера
-    environment_game_pole = GamePole(pole_size)    
-    environment_game_pole.init()
-    environment_game_pole.show()
+    opponent_pole = GamePole(pole_size)    
+    opponent_pole.init()
+    # environment_game_pole.show()
 
-    current_battle = SeaBattle(user_game_pole._pole, environment_game_pole._pole)
+    current_battle = SeaBattle()
 
-    while environment_game_pole._ships and user_game_pole._ships:
-        take_action(current_battle, environment_game_pole)
-        # environment_game_pole.show()
-
+    while user_pole._ships and opponent_pole._ships:
+        print('User Pole')
+        user_pole.show(user_pole._pole)
         print()
+        print('Opponent Pole for User')
+        user_pole.show(user_pole._opponent_pole)
 
-        take_action(current_battle, user_game_pole, user=False)
-        # user_game_pole.show()
+        take_action(current_battle, opponent_pole, user_pole)
+
+        take_action(current_battle, user_pole, opponent_pole, user=False)
 
 
 if __name__ == '__main__':
